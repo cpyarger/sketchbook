@@ -49,8 +49,10 @@ void displayAbout()
 //-------------------------------------------------------------------------------
 void displaySetup()
 {
-  TouchScreenForm form = TouchScreenForm("Tests", 2);
-  form.setClearScreenOnDraw(true);
+
+   TouchScreenMenu setupMenu = TouchScreenMenu(SetupMenuItems, 2, 10, 20, CENTERJ, TITLE);
+
+  setupMenu.setClearScreenOnDraw(true);
 
 
   TouchScreenButton buttons[] = {
