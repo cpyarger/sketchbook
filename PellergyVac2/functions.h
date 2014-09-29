@@ -61,17 +61,11 @@ void displaySetup()
     };
 
 
-    form.setButtons(buttons);
-  form.draw();
+    
 
-  while(1){ // stay on this screen until the back button is hit
-    TouchScreenArea *item = form.process(true);
-    if(item!=NULL){
-      if(!strcmp(item->getText(),"<- Back")){
-        return;
-      }
-    }
-  }
+
+    
+  
 }
 
 //-------------------------------------------------------------------------------
@@ -108,7 +102,7 @@ void checkButtons()
 {
   if(backFromCurrentSetup.process())
     curMenu = &mainMenu;
-  DrawTime();
+  //DrawTime();
   /*else if(backFromAbout.process())
    curMenu = &mainMenu;*/
 
@@ -217,5 +211,13 @@ if ( ctime1 == 1 ){
 
 
 }
+  void DrawTestTime(int h, int v){
+    char *s1;//Character array that date strings are dumped into 
+    String s2=String(TestHour)+":"+String(TestMin); //Time format string
+    s1 = strdup(s2.c_str()); //Convert String into char*
+    Tft.drawString(s1,h,v,3,BLUE);
+  }
+// keep track of which form is the currently active one
+
 
 
