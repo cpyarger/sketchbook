@@ -39,7 +39,8 @@ See the readme.txt file for information on find the libraries this library uses.
 
 int TestHour=0;
 int TestMin=0;
-
+int THL=0;
+int TML=1;
 TouchScreenForm form2 = TouchScreenForm("Set Time", 2);
 
 
@@ -57,6 +58,8 @@ TouchScreenArrowButton arrowButtons[] = {
   TouchScreenArrowButton("HDown", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 255), 30, TSC.getScreenHeight() - 120, 60, 30, DOWN),
    TouchScreenArrowButton("MUp", TSC.createColor(0, 0, 0), TSC.createColor(255, 200, 0), 140, TSC.getScreenHeight() - 180 , 60, 30, UP),
   TouchScreenArrowButton("MDown", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 255), 140, TSC.getScreenHeight() - 120, 60, 30, DOWN),
+  TouchScreenArrowButton("Back", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 255), 20, TSC.getScreenHeight() - 40, 60, 30, DOWN),
+  TouchScreenArrowButton("Save", TSC.createColor(0, 0, 0), TSC.createColor(0, 255, 0), 130, TSC.getScreenHeight() - 40, 60, 30, DOWN),
   TouchScreenArrowButton("ENDOFFORM")
 };
 
@@ -71,10 +74,12 @@ void DrawTestTime(int h, int v){
 TouchScreenForm *curForm = &form2;
 
 void redraw(){
-        TSC.clearScreen();
-        curForm->draw();
-        DrawTime();
-        DrawTestTime(100, 50);
+  TSC.clearScreen();
+  curForm->draw();
+  DrawTestTime(10,80);
+
+        //DrawTime();
+
 }
 
 
@@ -82,9 +87,9 @@ void setup(void) {
   Serial.begin(57000);
    setSyncProvider(RTC.get);//Get Time from RTC
 //read value for startTime hour
-TestHour=EEPROM.read(0);
+TestHour=EEPROM.read(THL);
 //read value for startTime minute
-TestMin=EEPROM.read(1);
+TestMin=EEPROM.read(TML);
 
   form2.setArrowButtons(arrowButtons);
   form2.setLabels(labels2);
@@ -124,6 +129,19 @@ void loop() {
       }
         else if(!strcmp(item->getText(),"HDown")){
         TestHour--;
+        redraw();
+          //Serial.print("Hour Down: ");
+          //Serial.println(TestHour); 
+        }
+        else if(!strcmp(item->getText(),"Save")){
+          EEPROM.write(THL,TestHour);
+          Serial.print("Wrote TestHour with Value: ");
+          Serial.println(TestHour);
+          EEPROM.write(TML,TestMin);
+          Serial.print("Wrote TestMin with Value: ");
+          Serial.println(TestMin);
+          
+        
         redraw();
           //Serial.print("Hour Down: ");
           //Serial.println(TestHour); 
