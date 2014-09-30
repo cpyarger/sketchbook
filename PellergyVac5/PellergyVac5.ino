@@ -90,7 +90,6 @@ Serial.println("Setup Complete");
 
 void drawStartTime(){
 Serial.println("DrawStartTime");
-  TSC.clearScreen();
   curForm->draw();
 
   char *s1;//Character array that date strings are dumped into 
@@ -99,42 +98,48 @@ Serial.println("DrawStartTime");
   Tft.drawString(s1,10,80,3,WHITE);
 }
 void redraw(){
-  TSC.clearScreen();
+  
   curForm->draw();
   DrawTime();
 
 }
 
-void loop(void) {
-
+void loop(){
+Serial.println("a");
   
 
-  TouchScreenArea *item = curForm->process(true);
+  TouchScreenArea *item = curForm.process(false);
+     
+Serial.println("b");
+
   if (item->getText() == "Menu"){
     Serial.println("Menu");
     curForm=&formMenu;
-    TSC.clearScreen();
+    
     curForm->draw();
   }
   
   else if (item->getText() == "Start Time"){
     Serial.println("Start Time");
     curForm=&formStartTime;
-    TSC.clearScreen();
+    
     curForm->draw();
   }
   else if (item->getText() == "<- Home"){
     Serial.println("Home");
     curForm=&formMain;
-    TSC.clearScreen();
+    
     curForm->draw();
   }
 
 
+Serial.println("c");
 
 
   StartHour= constrain(StartHour, 0, 24);
   StartMin = constrain(StartMin, 0, 59);
+Serial.println("d");
+
 }
 
 

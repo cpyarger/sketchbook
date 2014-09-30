@@ -924,7 +924,7 @@ TouchScreenMenuItem *TouchScreenMenu::process(bool waitForItem){
             p.y = map(p.y, TS_MINY, TS_MAXY, _controller->getScreenHeight(), 0);
             item = checkForHit(p.x , p.y);
         }
-    }while(item==NULL && waitForItem);
+    }while(item==NULL || waitForItem);
     
     return item;
 }
