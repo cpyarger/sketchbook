@@ -59,8 +59,8 @@ TouchScreenArrowButton TimeMenuButtons[] = {
   };
   // create the various menus setting the items, font size, spacing, padding, justification and titles
 
-  TouchScreenMenu MenuMain = TouchScreenMenu(mainItems, 2, 10, 10, CENTERJ, "Main Menu");
-TouchScreenMenu mainMenu = TouchScreenMenu(mainMenuItems, 2, 10, 10, CENTERJ, "Main Menu");
+  TouchScreenMenu MenuMain = TouchScreenMenu(mainItems, 2, 10, 10, CENTERJ, "VacControl");
+TouchScreenMenu mainMenu = TouchScreenMenu(mainMenuItems, 2, 10, 20, CENTERJ, "Menu");
 
 // keep track of which menu is the currently active one
 TouchScreenMenu *curMenu = &MenuMain;
@@ -111,8 +111,35 @@ void setup(void) {
   TSC.init(); // make sure everything get initialized
   setSyncProvider(RTC.get);//Get Time from RTC
   mainMenu.setClearScreenOnDraw(true);
-  curMenu->draw(); // put up the main menu
-  
+  curMenu->draw(); // put up the main menu  
+}
+void drawAbout(){
+}
+void drawSettings(){
+}
+void drawSetTime(){
+}
+void runVac(){
+}
+void drawStartTimeMenu(){
+}
+void drawStopTimeMenu(){
+}
+void drawModes(){
+}
+void drawTests(){
+}
+void drawRun(){
+}
+void drawAlarm(){
+}
+void Alarm(){
+}
+void drawEnabled(){
+}
+void checkSensors(){
+}
+void status(){
 }
 
 void loop(void) {
@@ -122,10 +149,7 @@ void loop(void) {
     TouchScreenMenuItem *item = curMenu->process(false);
     // check to see which, if any, menu item was pressed
     checkMenuSelection(item);
-        
-
     DrawTime();
-        
   }
   else{
     // if there isn't a current menu being displayed check all of the buttons
@@ -136,8 +160,9 @@ void loop(void) {
 
 // check various buttons and perform actions if any was pressed
 void checkButtons(){
-
+  Serial.println("CheckButtons");
 }
+
 // check to see if any menu item was pressed and do something
 void checkMenuSelection(TouchScreenMenuItem *item) {
   boolean handled = false;
@@ -146,11 +171,8 @@ void checkMenuSelection(TouchScreenMenuItem *item) {
     if(curMenu == &MenuMain){
 
       if (item->getText() == "Menu"){
-
         Serial.println("Menu");
         curMenu=&mainMenu;
-        TSC.clearScreen();
-
         curMenu->draw();
       }
 
@@ -159,7 +181,8 @@ void checkMenuSelection(TouchScreenMenuItem *item) {
 
       // if the menu item didn't get handled redraw it unpressed
       if(handled==false)
-        curMenu->drawItem(item,false);
+      Serial.println("MenuItem Redraw");
+        //curMenu->drawItem(item,false);
     }
   }
 }
