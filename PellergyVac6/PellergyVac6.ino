@@ -26,6 +26,10 @@ See the readme.txt file for information on find the libraries this library uses.
 #include <TouchScreen.h>
 #include <TFT.h>
 #include <cstddef.h>
+#include <Time.h>  
+#include <Wire.h>  
+#include <DS1307RTC.h>
+#include "TimeStuff.h"
 
 // create the array of items for the first sub menu
 
@@ -45,8 +49,9 @@ TouchScreenMenu *curMenu = &mainMenu;
 
 
 void setup(void) {
-  TSC.setBackColor(TSC.createColor(0, 255, 0)); // change the default background color
+  TSC.setBackColor(TSC.createColor(0, 100, 0)); // change the default background color
   TSC.init(); // make sure everything get initialized
+  setSyncProvider(RTC.get);//Get Time from RTC
 
   curMenu->draw(); // put up the main menu
 }
@@ -58,8 +63,7 @@ void loop(void) {
     TouchScreenMenuItem *item = curMenu->process(false);
     // check to see which, if any, menu item was pressed
     checkMenuSelection(item);
-        TouchScreenArea lbl1 = TouchScreenLabel("This is a label with bg.", TSC.createColor(0, 0, 0), TSC.createColor(255, 255, 255), 45, 10, 1, 2, true);
-        lbl1.draw();
+   DrawTime();
   }else{
     // if there isn't a current menu being displayed check all of the buttons
     // to see if any of them was pressed
