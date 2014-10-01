@@ -95,9 +95,10 @@ char* leadingZero[]={
   "00", "01", "02", "03", "04", "05", "06", "07", "08", "09"}; //Char array for Leading Zeros
 
 void DrawTime(){
-  
+  Serial.print("DrawTime");
   if (lmin != minute(now())){
-int    hs=hour(now());
+  Serial.print("DrawTime+ExecuteDraw");
+    int    hs=hour(now());
    int ms=minute(now());
  if (hs >= 0 && hs < 10) {
     h=leadingZero[hs];
