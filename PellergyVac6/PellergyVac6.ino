@@ -30,6 +30,22 @@ This example shows the various abilities of the TouchScreenMenu library.
 #include <Wire.h>  
 #include <DS1307RTC.h>
 #include "TimeStuff.h"
+#define VERSION "0.1"
+#define TITLE "Vacuum Control System"
+
+
+int runtime=1000;
+int curtime;
+int startTime = 1300 ;
+int stopTime = 1430 ;
+int TestHour=0;
+int TestMin=0;
+int THL=0;
+int TML=1;
+String h; //Hours
+String m; //Minutes
+String timeString =  "00:00";
+int lmin=255;
 
 // create the array of items for the first sub menu
 
@@ -44,8 +60,17 @@ TouchScreenMenuItem mainMenuItems[] = {
   TouchScreenMenuItem("Setup"),
   TouchScreenMenuItem("Tests"),
   TouchScreenMenuItem("About"),
+  TouchScreenMenuItem("<- BACK"),
   TouchScreenMenuItem("ENDOFMENU")
 
+  };
+  TouchScreenMenuItem SetupMenuItems[] = {
+  TouchScreenMenuItem("Time"),
+  TouchScreenMenuItem("Modes"),
+  TouchScreenMenuItem("Start Time"),
+  TouchScreenMenuItem("Stop Time"),
+  TouchScreenMenuItem("<- BACK"),
+  TouchScreenMenuItem("ENDOFMENU")
   };
 
 TouchScreenArrowButton TimeMenuButtons[] = {
@@ -59,19 +84,16 @@ TouchScreenArrowButton TimeMenuButtons[] = {
   };
   // create the various menus setting the items, font size, spacing, padding, justification and titles
 
-  TouchScreenMenu MenuMain = TouchScreenMenu(mainItems, 2, 10, 10, CENTERJ, "VacControl");
+TouchScreenMenu MenuMain = TouchScreenMenu(mainItems, 2, 10, 10, CENTERJ, "VacControl");
 TouchScreenMenu mainMenu = TouchScreenMenu(mainMenuItems, 2, 10, 20, CENTERJ, "Menu");
-
+TouchScreenMenu testMenu = TouchScreenMenu(mainMenuItems, 2, 10, 20, CENTERJ, "Tests");
+TouchScreenMenu setupMenu = TouchScreenMenu(mainMenuItems, 2, 10, 20, CENTERJ, "Setup");
 // keep track of which menu is the currently active one
 TouchScreenMenu *curMenu = &MenuMain;
 
 char* leadingZero[]={
   "00", "01", "02", "03", "04", "05", "06", "07", "08", "09"}; //Char array for Leading Zeros
 
-  String h; //Hours
-  String m; //Minutes
-    String timeString =  "00:00";
-int lmin;
 void DrawTime(){
   
   if (lmin != minute(now())){
@@ -111,35 +133,93 @@ void setup(void) {
   TSC.init(); // make sure everything get initialized
   setSyncProvider(RTC.get);//Get Time from RTC
   mainMenu.setClearScreenOnDraw(true);
+  MenuMain.setClearScreenOnDraw(true);
+
   curMenu->draw(); // put up the main menu  
 }
-void drawAbout(){
+void drawMainScreen(){
+Serial.println("MAinScreen");
+lmin=99;
+        curMenu=&MenuMain;
+        curMenu->draw();
 }
-void drawSettings(){
+
+void drawMainMenu(){
+  Serial.println("Menu");
+        curMenu=&mainMenu;
+        curMenu->draw();
+}
+void drawAbout(){
+  Serial.println("drawAboutScreen");
+   TouchScreenForm form = TouchScreenForm("About", 2);
+  form.setClearScreenOnDraw(true);
+  char versionStr[100];
+  strcpy(versionStr,"Version: ");
+  strcat(versionStr,VERSION);
+
+  TouchScreenLabel labels[] = {
+    TouchScreenLabel(TITLE, TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 5, 35, 1, 2, true),
+    TouchScreenLabel("Written By: Chris Yarger", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 5, 50, 1, 2, true),
+    TouchScreenLabel(versionStr, TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 5, 65, 1, 2, true),
+    TouchScreenLabel("ENDOFFORM")
+    };
+  TouchScreenButton buttons[] = {
+    TouchScreenButton("<- Back", TSC.createColor(255, 255, 255), TSC.createColor(255, 0, 0), 50, TSC.getScreenHeight() - 50, 2, 10),
+    TouchScreenButton("ENDOFFORM")
+    };
+    form.setLabels(labels);
+  form.setButtons(buttons);
+  form.draw();
+
+  while(1){ // stay on this screen until the back button is hit
+    TouchScreenArea *item = form.process(true);
+    if(item!=NULL){
+      if(!strcmp(item->getText(),"<- Back")){
+        Serial.println("Return from About");
+        drawMainMenu();
+        return;
+      }
+    }
+  }
+}
+void drawSetup(){
+  Serial.println("drawSettings");
 }
 void drawSetTime(){
+  Serial.println("drawSetTime");
 }
 void runVac(){
+  Serial.println("runVac");
 }
 void drawStartTimeMenu(){
+  Serial.println("drawStartTimeMenu");
 }
 void drawStopTimeMenu(){
+  Serial.println("drawStopTimeMenu");
 }
 void drawModes(){
+  Serial.println("drawModes");
 }
 void drawTests(){
+  Serial.println("DrawTests");
 }
 void drawRun(){
+  Serial.println("DrawRun");
 }
 void drawAlarm(){
+  Serial.println("DrawAlarm Mode Screen");
 }
 void Alarm(){
+  Serial.println("Alarm");
 }
 void drawEnabled(){
+  Serial.println("DrawEnabled Screen");
 }
 void checkSensors(){
+  Serial.println("CheckSensors");
 }
 void status(){
+  Serial.println("Status Screen");
 }
 
 void loop(void) {
@@ -171,20 +251,35 @@ void checkMenuSelection(TouchScreenMenuItem *item) {
     if(curMenu == &MenuMain){
 
       if (item->getText() == "Menu"){
-        Serial.println("Menu");
-        curMenu=&mainMenu;
-        curMenu->draw();
+        drawMainMenu();
+      }
+    }
+     if(curMenu == &mainMenu){
+Serial.println("inMain Menu");
+      if (item->getText() == "About"){
+        Serial.println("About");
+        drawAbout();
+      }
+      else if (item->getText() == "Tests"){
+        Serial.println("to Tests Screen");
+        drawMainScreen();
+      }
+
+else if (item->getText() == "Setup"){
+        Serial.println("to Setup Screen");
+        drawMainScreen();
+      }
+
+      else if (item->getText() == "<- BACK"){
+        Serial.println("Back to Main Screen");
+        drawMainScreen();
       }
 
 
 
 
       // if the menu item didn't get handled redraw it unpressed
-      if(handled==false)
-      Serial.println("MenuItem Redraw");
-        //curMenu->drawItem(item,false);
-    }
-  }
-}
+    
+}}}
 
 
