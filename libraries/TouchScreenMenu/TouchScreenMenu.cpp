@@ -317,7 +317,7 @@ bool TouchScreenArea::process(bool waitForClick){
     bool hit=false;
     bool wasHit = false;
     do{
-        TSPoint p = _controller->getTouchScreen()->getPoint();
+        Point p = _controller->getTouchScreen()->getPoint();
         
         if (p.z > _controller->getTouchScreen()->pressureThreshhold) {
             p.x = map(p.x, TS_MINX, TS_MAXX, _controller->getScreenWidth(), 0);
@@ -530,7 +530,7 @@ bool TouchScreenSlider::process(){
     bool hit=false;
     bool wasChanged = false;
     //do{
-        TSPoint p = _controller->getTouchScreen()->getPoint();
+        Point p = _controller->getTouchScreen()->getPoint();
         
         if (p.z > _controller->getTouchScreen()->pressureThreshhold) {
             p.x = map(p.x, TS_MINX, TS_MAXX, _controller->getScreenWidth(), 0);
@@ -917,14 +917,14 @@ void TouchScreenMenu::getTitleDims(int *x, int *y, int *w, int *h){
 TouchScreenMenuItem *TouchScreenMenu::process(bool waitForItem){
     TouchScreenMenuItem *item = 0;
     do{
-        TSPoint p = _controller->getTouchScreen()->getPoint();
+        Point p = _controller->getTouchScreen()->getPoint();
     
         if (p.z > _controller->getTouchScreen()->pressureThreshhold) {
             p.x = map(p.x, TS_MINX, TS_MAXX, _controller->getScreenWidth(), 0);
             p.y = map(p.y, TS_MINY, TS_MAXY, _controller->getScreenHeight(), 0);
             item = checkForHit(p.x , p.y);
         }
-    }while(item==NULL || waitForItem);
+    }while(item==NULL && waitForItem);
     
     return item;
 }

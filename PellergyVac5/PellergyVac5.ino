@@ -59,6 +59,8 @@ TouchScreenLabel TimeLabels[] = {
   TouchScreenLabel("Minute", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 110, TSC.getScreenHeight() - 145, 2, 2, true),
   TouchScreenLabel("ENDOFFORM")
   };
+  TouchScreenButton backFromCurrentSetup = TouchScreenButton("<- Back", TSC.createColor(255, 255, 255), TSC.createColor(255, 0, 0), 50, TSC.getScreenHeight() - 50, 2, 10);
+
   TouchScreenForm *curForm = &formMain;
 
 void setup(void) {
@@ -103,12 +105,14 @@ void redraw(){
   DrawTime();
 
 }
-
-void loop(){
+void checkMenuSelection(TouchScreenArea *item) {
+  boolean handled = false;
+  if(item != NULL){
 Serial.println("a");
-  
-
-  TouchScreenArea *item = curForm.process(false);
+if  (curForm == &formMain) {
+  Serial.println("z");
+  DrawTime();
+}  
      
 Serial.println("b");
 
@@ -136,6 +140,37 @@ Serial.println("b");
 Serial.println("c");
 
 
+}}
+void MenuProcess(){
+  if(curForm!=NULL)
+  {
+    // process the current menu
+    TouchScreenArea *item = curForm->process(false);
+    // check to see which, if any, menu item was pressed
+    checkMenuSelection(item);
+  }
+  else
+  {
+    // if there isn't a current menu being displayed check all of the buttons
+    // to see if any of them was pressed
+    checkButtons();
+  }
+}
+void checkButtons()
+{
+  if(backFromCurrentSetup.process())
+    curForm = &formMain;
+  //DrawTime();
+  /*else if(backFromAbout.process())
+   curForm = &mainMenu;*/
+
+  if(curForm != NULL)
+    curForm->draw();
+}
+
+
+void loop(){
+MenuProcess();
   StartHour= constrain(StartHour, 0, 24);
   StartMin = constrain(StartMin, 0, 59);
 Serial.println("d");
