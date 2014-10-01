@@ -1,7 +1,7 @@
 /*
 This example shows the various abilities of the TouchScreenMenu library.
-See the readme.txt file for information on find the libraries this library uses.
-
+ See the readme.txt file for information on find the libraries this library uses.
+ 
  TouchScreenMenu Library. 
  
  2012 Copyright (c) Scott Shaver
@@ -35,25 +35,84 @@ See the readme.txt file for information on find the libraries this library uses.
 
 
 // create the array of items for the main menu
-TouchScreenMenuItem mainMenuItems[] = {
+TouchScreenMenuItem mainItems[] = {
   TouchScreenMenuItem("Menu"),
   TouchScreenMenuItem("ENDOFMENU")
-};
+  };
 
-// create the various menus setting the items, font size, spacing, padding, justification and titles
+TouchScreenMenuItem mainMenuItems[] = {
+  TouchScreenMenuItem("Setup"),
+  TouchScreenMenuItem("Tests"),
+  TouchScreenMenuItem("About"),
+  TouchScreenMenuItem("ENDOFMENU")
 
+  };
+
+TouchScreenArrowButton TimeMenuButtons[] = {
+  TouchScreenArrowButton("HUp", TSC.createColor(0, 0, 0), TSC.createColor(255, 200, 0), 30, TSC.getScreenHeight() - 180 , 60, 30, UP),
+  TouchScreenArrowButton("HDown", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 255), 30, TSC.getScreenHeight() - 120, 60, 30, DOWN),
+  TouchScreenArrowButton("MUp", TSC.createColor(0, 0, 0), TSC.createColor(255, 200, 0), 140, TSC.getScreenHeight() - 180 , 60, 30, UP),
+  TouchScreenArrowButton("MDown", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 255), 140, TSC.getScreenHeight() - 120, 60, 30, DOWN),
+  TouchScreenArrowButton("Back", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 0), 20, TSC.getScreenHeight() - 40, 60, 30, LEFT),
+  TouchScreenArrowButton("Save", TSC.createColor(0, 0, 0), TSC.createColor(0, 255, 0), 130, TSC.getScreenHeight() - 40, 60, 30, RIGHT),
+  TouchScreenArrowButton("ENDOFFORM")
+  };
+  // create the various menus setting the items, font size, spacing, padding, justification and titles
+
+  TouchScreenMenu MenuMain = TouchScreenMenu(mainItems, 2, 10, 10, CENTERJ, "Main Menu");
 TouchScreenMenu mainMenu = TouchScreenMenu(mainMenuItems, 2, 10, 10, CENTERJ, "Main Menu");
 
 // keep track of which menu is the currently active one
-TouchScreenMenu *curMenu = &mainMenu;
+TouchScreenMenu *curMenu = &MenuMain;
 
+char* leadingZero[]={
+  "00", "01", "02", "03", "04", "05", "06", "07", "08", "09"}; //Char array for Leading Zeros
 
+  String h; //Hours
+  String m; //Minutes
+    String timeString =  "00:00";
+int lmin;
+void DrawTime(){
+  
+  if (lmin != minute(now())){
+int    hs=hour(now());
+   int ms=minute(now());
+ if (hs >= 0 && hs < 10) {
+    h=leadingZero[hs];
+  }
+  else{
+    h=String(hs);
+  }
+  //Give Leading Zeros To Minutes
+  
+    if (ms >= 0 && ms < 10) {
+    m=leadingZero[ms];
+  }
+  else{
+    m=String(ms);
+  }
+   timeString=h+":"+m;
+  char *TimeString = strdup(timeString.c_str()); //Convert String into char*
+
+  Serial.print("time: ");
+  Serial.println(TimeString);
+ 
+if(curMenu == &MenuMain){
+  Serial.println("drawTime");
+        TouchScreenArea lbl1 = TouchScreenLabel(TimeString, TSC.createColor(255, 255, 255), TSC.createColor(0, 100, 0), 10, 200, 5, 10, true);
+        lbl1.draw();
+   
+  }
+       lmin=minute(now());
+}}
 void setup(void) {
+  Serial.begin(57600);
   TSC.setBackColor(TSC.createColor(0, 100, 0)); // change the default background color
   TSC.init(); // make sure everything get initialized
   setSyncProvider(RTC.get);//Get Time from RTC
-
+  mainMenu.setClearScreenOnDraw(true);
   curMenu->draw(); // put up the main menu
+  
 }
 
 void loop(void) {
@@ -63,8 +122,12 @@ void loop(void) {
     TouchScreenMenuItem *item = curMenu->process(false);
     // check to see which, if any, menu item was pressed
     checkMenuSelection(item);
-   DrawTime();
-  }else{
+        
+
+    DrawTime();
+        
+  }
+  else{
     // if there isn't a current menu being displayed check all of the buttons
     // to see if any of them was pressed
     checkButtons();
@@ -80,16 +143,25 @@ void checkMenuSelection(TouchScreenMenuItem *item) {
   boolean handled = false;
   if(item != NULL){
     // main menu items 
-    if(curMenu == &mainMenu){
+    if(curMenu == &MenuMain){
+
+      if (item->getText() == "Menu"){
+
+        Serial.println("Menu");
+        curMenu=&mainMenu;
+        TSC.clearScreen();
+
+        curMenu->draw();
+      }
 
 
 
 
-      
-    
-    // if the menu item didn't get handled redraw it unpressed
-    if(handled==false)
+      // if the menu item didn't get handled redraw it unpressed
+      if(handled==false)
         curMenu->drawItem(item,false);
-  }}
+    }
+  }
 }
+
 
