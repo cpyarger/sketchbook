@@ -45,8 +45,11 @@ int TML=1;
 String h; //Hours
 String m; //Minutes
 String timeString =  "00:00";
+char *TimeString;
 int lmin=255;
-
+int ms;
+int hs;
+boolean debugEnable=false;
 // create the array of items for the first sub menu
 
 
@@ -64,7 +67,7 @@ TouchScreenMenuItem mainMenuItems[] = {
   TouchScreenMenuItem("ENDOFMENU")
 
   };
-  TouchScreenMenuItem SetupMenuItems[] = {
+TouchScreenMenuItem SetupMenuItems[] = {
   TouchScreenMenuItem("Time"),
   TouchScreenMenuItem("Modes"),
   TouchScreenMenuItem("Start Time"),
@@ -84,76 +87,94 @@ TouchScreenArrowButton TimeMenuButtons[] = {
   };
   // create the various menus setting the items, font size, spacing, padding, justification and titles
 
-TouchScreenMenu MenuMain = TouchScreenMenu(mainItems, 2, 10, 10, CENTERJ, "VacControl");
+  TouchScreenMenu startScreen = TouchScreenMenu(mainItems, 2, 10, 10, CENTERJ, "VacControl");
 TouchScreenMenu mainMenu = TouchScreenMenu(mainMenuItems, 2, 10, 20, CENTERJ, "Menu");
 TouchScreenMenu testMenu = TouchScreenMenu(mainMenuItems, 2, 10, 20, CENTERJ, "Tests");
 TouchScreenMenu setupMenu = TouchScreenMenu(mainMenuItems, 2, 10, 20, CENTERJ, "Setup");
 // keep track of which menu is the currently active one
-TouchScreenMenu *curMenu = &MenuMain;
+TouchScreenMenu *curMenu = &startScreen;
 
 char* leadingZero[]={
   "00", "01", "02", "03", "04", "05", "06", "07", "08", "09"}; //Char array for Leading Zeros
 
 void DrawTime(){
-  Serial.print("DrawTime");
+  delay(10);
+  if (debugEnable==true){
+    Serial.print("DrawTime");
+    Serial.print(lmin);
+    Serial.print(":");
+    Serial.print(ms);
+    Serial.print(":");
+    Serial.print(hs);
+    Serial.print(":");
+  }
   if (lmin != minute(now())){
-  Serial.print("DrawTime+ExecuteDraw");
-    int    hs=hour(now());
-   int ms=minute(now());
- if (hs >= 0 && hs < 10) {
-    h=leadingZero[hs];
-  }
-  else{
-    h=String(hs);
-  }
-  //Give Leading Zeros To Minutes
-  
-    if (ms >= 0 && ms < 10) {
-    m=leadingZero[ms];
-  }
-  else{
-    m=String(ms);
-  }
-   timeString=h+":"+m;
-  char *TimeString = strdup(timeString.c_str()); //Convert String into char*
+    Serial.println("DrawTime+ExecuteDraw");
+    hs=hour(now());
+    ms=minute(now());
+    if (hs >= 0 && hs < 10) {
+      h=leadingZero[hs];
+    }
+    else{
+      h=String(hs);
+    }
+    //Give Leading Zeros To Minutes
 
-  Serial.print("time: ");
-  Serial.println(TimeString);
- 
-if(curMenu == &MenuMain){
-  Serial.println("drawTime");
-        TouchScreenArea lbl1 = TouchScreenLabel(TimeString, TSC.createColor(255, 255, 255), TSC.createColor(0, 100, 0), 10, 200, 5, 10, true);
-        lbl1.draw();
-   
+      if (ms >= 0 && ms < 10) {
+      m=leadingZero[ms];
+    }
+    else{
+      m=String(ms);
+    }
+    timeString=h+":"+m;
+    TimeString = strdup(timeString.c_str()); //Convert String into char*
+
+    Serial.print("time: ");
+    Serial.println(TimeString);
+
+    if(curMenu == &startScreen){
+      Serial.println("drawTime");
+      TouchScreenArea lbl1 = TouchScreenLabel(TimeString, TSC.createColor(255, 255, 255), TSC.createColor(0, 100, 0), 10, 200, 5, 10, true);
+      lbl1.draw();
+
+    }
+    lmin=minute(now());
+
   }
-       lmin=minute(now());
-}}
+  //Serial.println(timeString);
+
+}
 void setup(void) {
   Serial.begin(57600);
   TSC.setBackColor(TSC.createColor(0, 100, 0)); // change the default background color
   TSC.init(); // make sure everything get initialized
   setSyncProvider(RTC.get);//Get Time from RTC
   mainMenu.setClearScreenOnDraw(true);
-  MenuMain.setClearScreenOnDraw(true);
+  //  StartScreen.setClearScreenOnDraw(true);
 
   curMenu->draw(); // put up the main menu  
 }
 void drawMainScreen(){
-Serial.println("MAinScreen");
-lmin=99;
-        curMenu=&MenuMain;
-        curMenu->draw();
+  Serial.println("MAinScreen");
+
+  lmin=99;
+  curMenu=&startScreen;
+  TSC.clearScreen();
+
+  curMenu->draw();
 }
 
 void drawMainMenu(){
   Serial.println("Menu");
-        curMenu=&mainMenu;
-        curMenu->draw();
+  curMenu=&mainMenu;
+  curMenu->draw();
 }
 void drawAbout(){
   Serial.println("drawAboutScreen");
-   TouchScreenForm form = TouchScreenForm("About", 2);
-  form.setClearScreenOnDraw(true);
+  TSC.clearScreen();
+
+  TouchScreenForm form = TouchScreenForm("About", 2);
+
   char versionStr[100];
   strcpy(versionStr,"Version: ");
   strcat(versionStr,VERSION);
@@ -249,38 +270,37 @@ void checkMenuSelection(TouchScreenMenuItem *item) {
   boolean handled = false;
   if(item != NULL){
     // main menu items 
-    if(curMenu == &MenuMain){
+    if(curMenu == &startScreen){
 
       if (item->getText() == "Menu"){
         drawMainMenu();
       }
     }
-     if(curMenu == &mainMenu){
-Serial.println("inMain Menu");
+    if(curMenu == &mainMenu){
+      Serial.println("inMain Menu");
       if (item->getText() == "About"){
         Serial.println("About");
         drawAbout();
       }
       else if (item->getText() == "Tests"){
         Serial.println("to Tests Screen");
-        drawMainScreen();
+        drawTests();
       }
 
-else if (item->getText() == "Setup"){
+      else if (item->getText() == "Setup"){
         Serial.println("to Setup Screen");
-        drawMainScreen();
+        drawSetup();
       }
 
       else if (item->getText() == "<- BACK"){
         Serial.println("Back to Main Screen");
         drawMainScreen();
       }
-
-
-
-
       // if the menu item didn't get handled redraw it unpressed
-    
-}}}
+    }
+  }
+}
+
+
 
 
