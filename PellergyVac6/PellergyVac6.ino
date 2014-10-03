@@ -91,61 +91,6 @@ TouchScreenMenu *curMenu = &startScreen;
 char* leadingZero[]={
   "00", "01", "02", "03", "04", "05", "06", "07", "08", "09"}; //Char array for Leading Zeros
 
-
-
-
-void drawSetTime(){
-  Serial.println("drawSetTime");
-}
-
-void runVac(){
-  Serial.println("runVac");
-}
-
-void drawStartTimeMenu(){
-  Serial.println("drawStartTimeMenu");
-}
-
-void drawStopTimeMenu(){
-  Serial.println("drawStopTimeMenu");
-}
-
-void drawModes(){
-  Serial.println("drawModes");
-}
-
-void drawTests(){
-  Serial.println("DrawTests");
-}
-void drawRun(){
-  Serial.println("DrawRun");
-}
-
-void drawAlarm(){
-  Serial.println("DrawAlarm Mode Screen");
-}
-
-void Alarm(){
-  Serial.println("Alarm");
-}
-
-void drawEnabled(){
-  Serial.println("DrawEnabled Screen");
-}
-
-void checkSensors(){
-  Serial.println("CheckSensors");
-}
-
-void status(){
-  Serial.println("Status Screen");
-}
-
-// check various buttons and perform actions if any was pressed
-void checkButtons(){
-  Serial.println("CheckButtons");
-}
-
 void DrawTime(){
   if (lmin != minute(now())){
     Serial.println("DrawTime+ExecuteDraw");
@@ -191,7 +136,9 @@ void drawMainMenu(){
   curMenu->draw();
 }
 
-
+void drawTests(){
+  Serial.println("DrawTests");
+}
 
 void drawSetup(){
   Serial.println("drawSettings");
@@ -200,7 +147,9 @@ void drawSetup(){
   
 }
 
-
+void checkButtons(){
+  Serial.println("CheckButtons");
+}
 
 
 void drawAbout(){
