@@ -75,25 +75,6 @@
 #define GREEN_BITS 6
 #define RED_BITS 5
 
-class TouchScreenMenu;
-
-// UI component justification values
-typedef enum
-{
-    CENTERJ, LEFTJ, RIGHTJ
-} Justify;
-
-// UI component directional values
-typedef enum
-{
-    RIGHT, LEFT, UP, DOWN
-} Direction;
-
-// UI component layout values
-typedef enum
-{
-    HORIZONTAL, VERTICAL
-} Layout;
 
 //---------------------------------------------------------------------------------
 // TouchScreenController
@@ -213,67 +194,8 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------------
-// TouchScreenMenuItem
-// An item that will be displyed for a menu.
-//---------------------------------------------------------------------------------
-class TouchScreenMenuItem {
-public:
-    TouchScreenMenuItem(char *text);
-    TouchScreenMenuItem(char *text, unsigned int foreColor, unsigned int backColor);
-    
-    char *getText();
-    void setText(char *);
-    unsigned int getForeColor();
-    unsigned int getBackColor();
-    void setForeColor(unsigned int foreColor);
-    void setBackColor(unsigned int backColor);
-private:
-    char *_text;
-    unsigned int _foreColor;
-    unsigned int _backColor;
-};
 
-//---------------------------------------------------------------------------------
-// TouchScreenMenu
-// A menu containing one or more TouchScreenMenuItems
-//---------------------------------------------------------------------------------
-class TouchScreenMenu {
-public:
-    TouchScreenMenu();
-    TouchScreenMenu(TouchScreenMenuItem items[]);
-    TouchScreenMenu(TouchScreenMenuItem items[], unsigned int fontSize, unsigned int spacing, unsigned int padding, Justify justify);
-    TouchScreenMenu(TouchScreenMenuItem items[], unsigned int fontSize, unsigned int spacing, unsigned int padding, Justify justify, char *title);
-    
-    void setTitle(char *title);
-    void setTitleColors(unsigned int foreColor, unsigned int backColor);
-    void setItems(TouchScreenMenuItem items[]);
-    void setFontSize(unsigned int fontSize);
-    void setTitleFontSize(unsigned int fontSize);
-    void setSpacing(unsigned int spacing);
-    void setPadding(unsigned int padding);
-    void setJustification(Justify justifyFlags);
-    void draw();
-    void getItemDims(unsigned int itemIndex, int *x, int *y, int *w, int *h);
-    void getTitleDims(int *x, int *y, int *w, int *h);
-    void drawItem(unsigned int itemIndex, bool pressed);
-    void drawItem(TouchScreenMenuItem *item, bool pressed);
-    TouchScreenMenuItem *checkForHit(unsigned int tx, unsigned int ty);
-    TouchScreenMenuItem *process(bool waitForItem);
-    void setClearScreenOnDraw(bool clearScreenOnDraw);
-private:
-    TouchScreenController *_controller;
-    TouchScreenMenuItem *_items;
-    char *_title;
-    unsigned int _foreColor;
-    unsigned int _backColor;
-    unsigned int _titleFontSize;
-    unsigned int _fontSize;
-    unsigned int _spacing;
-    unsigned int _padding;
-    Justify _justify;
-    bool _clearScreenOnDraw;
-};
+
 
 
 //---------------------------------------------------------------------------------

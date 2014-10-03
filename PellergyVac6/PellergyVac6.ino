@@ -5,7 +5,7 @@
 #include <Time.h>  
 #include <Wire.h>  
 #include <DS1307RTC.h>
-#include "TimeStuff.h"
+//#include "TimeStuff.h"
 
 int runtime=1000;
 int curtime;
@@ -26,39 +26,8 @@ int p1=3;
 int p2=5;
 int p3=6;
 int p4=9;
-boolean debugEnable=false;
 
-TouchScreenMenuItem mainItems[] = {
-  TouchScreenMenuItem("Menu"),
-  TouchScreenMenuItem("ENDOFMENU")
-  };
 
-TouchScreenMenuItem mainMenuItems[] = {
-  TouchScreenMenuItem("Setup"),
-  TouchScreenMenuItem("Tests"),
-  TouchScreenMenuItem("About"),
-  TouchScreenMenuItem("<- BACK"),
-  TouchScreenMenuItem("ENDOFMENU")
-  };
-
-TouchScreenMenuItem setupMenuItems[] = {
-  TouchScreenMenuItem("Time"),
-  TouchScreenMenuItem("Modes"),
-  TouchScreenMenuItem("Start Time"),
-  //TouchScreenMenuItem("Stop Time"),
-  TouchScreenMenuItem("<- BACK"),
-  TouchScreenMenuItem("ENDOFMENU")
-  };
-  
-TouchScreenMenuItem testMenuItems[] = {
-  TouchScreenMenuItem("Alarm"),
-  TouchScreenMenuItem("start/stop"),
-  //TouchScreenMenuItem("Start Time"),
-  //TouchScreenMenuItem("Stop Time"),
-  TouchScreenMenuItem("<- BACK"),
-  TouchScreenMenuItem("ENDOFMENU")
-  };
-  
 TouchScreenButton TimeMenuButtons[] = {
   TouchScreenButton("HUp", TSC.createColor(0, 0, 0), TSC.createColor(255, 200, 0), 30, TSC.getScreenHeight() - 180 , 60, 30),
   TouchScreenButton("HDown", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 255), 30, TSC.getScreenHeight() - 120, 60, 30),
@@ -80,16 +49,71 @@ TouchScreenButton aboutButtons[] = {
   TouchScreenButton("ENDOFFORM")
   };
 
-TouchScreenMenu startScreen = TouchScreenMenu(mainItems, 2, 10, 10, CENTERJ, "VacControl");
-TouchScreenMenu mainMenu = TouchScreenMenu(mainMenuItems, 2, 10, 20, CENTERJ, "Menu");
-TouchScreenMenu testMenu = TouchScreenMenu(testMenuItems, 2, 10, 20, CENTERJ, "Tests");
-TouchScreenMenu setupMenu = TouchScreenMenu(setupMenuItems, 2, 10, 20, CENTERJ, "Setup");
+TouchScreenForm startScreen = TouchScreenForm("VacControl",2);
+TouchScreenForm mainMenu = TouchScreenForm("Menu",2);
+TouchScreenForm testMenu = TouchScreenForm("Tests",2);
+TouchScreenForm setupMenu = TouchScreenForm("Setup",2);
 TouchScreenForm aboutForm = TouchScreenForm("About", 2);
 
-TouchScreenMenu *curMenu = &startScreen;
+TouchScreenForm *curMenu = &startScreen;
 
 char* leadingZero[]={
   "00", "01", "02", "03", "04", "05", "06", "07", "08", "09"}; //Char array for Leading Zeros
+
+
+
+
+void drawSetTime(){
+  Serial.println("drawSetTime");
+}
+
+void runVac(){
+  Serial.println("runVac");
+}
+
+void drawStartTimeMenu(){
+  Serial.println("drawStartTimeMenu");
+}
+
+void drawStopTimeMenu(){
+  Serial.println("drawStopTimeMenu");
+}
+
+void drawModes(){
+  Serial.println("drawModes");
+}
+
+void drawTests(){
+  Serial.println("DrawTests");
+}
+void drawRun(){
+  Serial.println("DrawRun");
+}
+
+void drawAlarm(){
+  Serial.println("DrawAlarm Mode Screen");
+}
+
+void Alarm(){
+  Serial.println("Alarm");
+}
+
+void drawEnabled(){
+  Serial.println("DrawEnabled Screen");
+}
+
+void checkSensors(){
+  Serial.println("CheckSensors");
+}
+
+void status(){
+  Serial.println("Status Screen");
+}
+
+// check various buttons and perform actions if any was pressed
+void checkButtons(){
+  Serial.println("CheckButtons");
+}
 
 void DrawTime(){
   if (lmin != minute(now())){
@@ -136,9 +160,7 @@ void drawMainMenu(){
   curMenu->draw();
 }
 
-void drawTests(){
-  Serial.println("DrawTests");
-}
+
 
 void drawSetup(){
   Serial.println("drawSettings");
@@ -147,9 +169,7 @@ void drawSetup(){
   
 }
 
-void checkButtons(){
-  Serial.println("CheckButtons");
-}
+
 
 
 void drawAbout(){
@@ -171,7 +191,7 @@ void drawAbout(){
 
 // check to see if any menu item was pressed and do something
 
-void checkMenuSelection(TouchScreenMenuItem *item) {
+void checkMenuSelection(TouchScreenArea *item) {
   boolean handled = false;
   if(item != NULL){
     // main menu items 
@@ -217,11 +237,6 @@ void setup(void) {
   TSC.setBackColor(TSC.createColor(0, 100, 0)); // change the default background color
   TSC.init(); // make sure everything get initialized
   setSyncProvider(RTC.get);//Get Time from RTC
-  mainMenu.setClearScreenOnDraw(true);
-  startScreen.setClearScreenOnDraw(true);
-  
-  setupMenu.setClearScreenOnDraw(true);
-  aboutForm.setClearScreenOnDraw(true);
   //setupMenu.setLabels(aboutLabels);
   aboutForm.setLabels(aboutLabels);
   aboutForm.setButtons(aboutButtons);
@@ -234,7 +249,7 @@ void loop(void) {
   // handle the current menu
   if(curMenu!=NULL){
     // process the current menu
-    TouchScreenMenuItem *item = curMenu->process(false);
+    TouchScreenArea *item = curMenu->process(false);
     // check to see which, if any, menu item was pressed
     checkMenuSelection(item);
     DrawTime();
