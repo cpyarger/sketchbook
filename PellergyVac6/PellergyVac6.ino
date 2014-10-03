@@ -1,4 +1,4 @@
-#include <TouchScreenMenu.h>
+#include <chrisMenu.h>
 #include <TouchScreen.h>
 #include <TFT.h>
 #include <cstddef.h>
@@ -22,6 +22,10 @@ char *TimeString;
 int lmin=255;
 int ms;
 int hs;
+int p1=3;
+int p2=5;
+int p3=6;
+int p4=9;
 boolean debugEnable=false;
 
 TouchScreenMenuItem mainItems[] = {
@@ -41,7 +45,7 @@ TouchScreenMenuItem setupMenuItems[] = {
   TouchScreenMenuItem("Time"),
   TouchScreenMenuItem("Modes"),
   TouchScreenMenuItem("Start Time"),
-  TouchScreenMenuItem("Stop Time"),
+  //TouchScreenMenuItem("Stop Time"),
   TouchScreenMenuItem("<- BACK"),
   TouchScreenMenuItem("ENDOFMENU")
   };
@@ -49,20 +53,20 @@ TouchScreenMenuItem setupMenuItems[] = {
 TouchScreenMenuItem testMenuItems[] = {
   TouchScreenMenuItem("Alarm"),
   TouchScreenMenuItem("start/stop"),
-  TouchScreenMenuItem("Start Time"),
-  TouchScreenMenuItem("Stop Time"),
+  //TouchScreenMenuItem("Start Time"),
+  //TouchScreenMenuItem("Stop Time"),
   TouchScreenMenuItem("<- BACK"),
   TouchScreenMenuItem("ENDOFMENU")
   };
   
-TouchScreenArrowButton TimeMenuButtons[] = {
-  TouchScreenArrowButton("HUp", TSC.createColor(0, 0, 0), TSC.createColor(255, 200, 0), 30, TSC.getScreenHeight() - 180 , 60, 30, UP),
-  TouchScreenArrowButton("HDown", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 255), 30, TSC.getScreenHeight() - 120, 60, 30, DOWN),
-  TouchScreenArrowButton("MUp", TSC.createColor(0, 0, 0), TSC.createColor(255, 200, 0), 140, TSC.getScreenHeight() - 180 , 60, 30, UP),
-  TouchScreenArrowButton("MDown", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 255), 140, TSC.getScreenHeight() - 120, 60, 30, DOWN),
-  TouchScreenArrowButton("Back", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 0), 20, TSC.getScreenHeight() - 40, 60, 30, LEFT),
-  TouchScreenArrowButton("Save", TSC.createColor(0, 0, 0), TSC.createColor(0, 255, 0), 130, TSC.getScreenHeight() - 40, 60, 30, RIGHT),
-  TouchScreenArrowButton("ENDOFFORM")
+TouchScreenButton TimeMenuButtons[] = {
+  TouchScreenButton("HUp", TSC.createColor(0, 0, 0), TSC.createColor(255, 200, 0), 30, TSC.getScreenHeight() - 180 , 60, 30),
+  TouchScreenButton("HDown", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 255), 30, TSC.getScreenHeight() - 120, 60, 30),
+  TouchScreenButton("MUp", TSC.createColor(0, 0, 0), TSC.createColor(255, 200, 0), 140, TSC.getScreenHeight() - 180 , 60, 30),
+  TouchScreenButton("MDown", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 255), 140, TSC.getScreenHeight() - 120, 60, 30),
+  TouchScreenButton("Back", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 0), 20, TSC.getScreenHeight() - 40, 60, 30),
+  TouchScreenButton("Save", TSC.createColor(0, 0, 0), TSC.createColor(0, 255, 0), 130, TSC.getScreenHeight() - 40, 60, 30),
+  TouchScreenButton("ENDOFFORM")
   };
 
 TouchScreenLabel aboutLabels[] = {
