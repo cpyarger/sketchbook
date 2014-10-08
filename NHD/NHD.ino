@@ -1,11 +1,135 @@
 
  
-boolean debug = true;
- 
+boolean debug = false;
+#include <Time.h>  
+#include <Wire.h>  
+#include <DS1307RTC.h>
 #include <SoftwareSerial.h>
+#include <EEPROM>
+char* leadingZero[]={
+  "00", "01", "02", "03", "04", "05", "06", "07", "08", "09"}; //Char array for Leading Zeros
+int runtime=1000;
+int curtime;
+int startTime = 1300 ;
+int stopTime = 1430 ;
+int TestHour=0;
+int TestMin=0;
+int THL=0;
+int TML=1;
+String h; //Hours
+String m; //Minutes
+String timeString =  "00:00";
+String menuLabel =  "PellerVac";
+
+char *TimeString;
+int lmin=255;
+int ms;
+int hs;
+int p1=3;
+int p2=5;
+int p3=6;
+int p4=9;
+byte buttons[] = {6,7,8,9}; // the analog 0-5 pins are also known as 14-19
+#define NUMBUTTONS sizeof(buttons)
+byte pressed[NUMBUTTONS], justpressed[NUMBUTTONS], justreleased[NUMBUTTONS];
+
+
 SoftwareSerial lcd(NULL, 10); // RX, TX
+void DrawTime(){
+  if (lmin != minute(now())){
+    Serial.println("DrawTime+ExecuteDraw");
+    hs=hour(now());
+    ms=minute(now());
+    if (hs >= 0 && hs < 10) {
+      h=leadingZero[hs];
+    }
+    else{
+      h=String(hs);
+    }
+    //Give Leading Zeros To Minutes
+      if (ms >= 0 && ms < 10) {
+      m=leadingZero[ms];
+    }
+    else{
+      m=String(ms);
+    }
+    timeString=h+":"+m;
+    TimeString = strdup(timeString.c_str()); //Convert String into char*
+lcdWriteLine(1,strdup(menuLabel.c_str()));
+lcdPrintAt(15, TimeString);
+
+    lmin=minute(now());
+  }
+}
+void menutitle(String title){
+  lcdClearLine(1);
+  lcdWriteLine(1,strdup(title.c_str()));
+  lcdPrintAt(15, TimeString);
+}
+void drawSetTime(){
+  Serial.println("drawSetTime");
+  menutitle("Set Time");
+  
+}
+
+void runVac(){
+  Serial.println("runVac");
+}
+
+void drawStartTimeMenu(){
+  Serial.println("drawStartTimeMenu");
+}
+
+void drawStopTimeMenu(){
+  Serial.println("drawStopTimeMenu");
+}
+
+void drawModes(){
+  Serial.println("drawModes");
+}
+
+void drawTests(){
+  Serial.println("DrawTests");
+}
+void drawRun(){
+  Serial.println("DrawRun");
+}
+
+void drawAlarm(){
+  Serial.println("DrawAlarm Mode Screen");
+}
+
+void Alarm(){
+  Serial.println("Alarm");
+}
+
+void drawEnabled(){
+  Serial.println("DrawEnabled Screen");
+}
+
+void checkSensors(){
+  Serial.println("CheckSensors");
+}
+
+void status(){
+  Serial.println("Status Screen");
+}
 
 void setup() {
+   byte i;
+  
+  // set up serial port
+  Serial.begin(9600);
+  Serial.print("Button checker with ");
+  Serial.print(NUMBUTTONS, DEC);
+  Serial.println(" buttons");
+
+  // pin13 LED
+  pinMode(13, OUTPUT);
+ 
+    
+    setSyncProvider(RTC.get);//Get Time from RTC
+
      if (debug) {
         Serial.begin(9600);
         while (!Serial) {
@@ -19,19 +143,33 @@ void setup() {
      delay(100);  // data sheet states 100mS is required upon power-up for the display's controller to initialize 
      
      lcdClearDisplay();
-     lcdBlinkingCursorOn();
+     lcdBlinkingCursorOff();
      
      if (debug) { // show the display's current status
         lcdReportSelf();
      }
      
      lcdClearDisplay();
-     lcd.write("\nHello, world !!    "); // drops the "H" without the \n in front of the character string. Why ??
-     lcd.write("Line2");                 // completely skips the 2nd line of the display
+      // drops the "H" without the \n in front of the character string. Why ??
+     lcdWriteLine(2,"Line2");                 // completely skips the 2nd line of the display
+     lcdWriteLine(3,"");                 // completely skips the 2nd line of the display
+     lcdWriteLine(4,"Menu Mode Start Stop");                 // completely skips the 2nd line of the display
+
      lcdSetCursor(0);                    // displays garbage instead of repositioning the cursor
+}
+void stateChange(){
+  byte bPins[] = { 
+  6,7,8,9};
+
 }
 
 void loop() {
+DrawTime();
+menutitle("Main Menu");
+delay(10000);
+
+drawSetTime();
+delay(10000);
 
 }
 
