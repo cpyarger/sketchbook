@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <TouchScreenMenu.h>
 #include <TouchScreen.h>
 #include <TFT.h>
@@ -5,15 +6,31 @@
 #include <Wire.h>  
 #include <DS1307RTC.h>
 #include <EEPROM.h>
+=======
+#include <chrisMenu.h>
+#include <TouchScreen.h>
+#include <TFT.h>
+#include <cstddef.h>
+#include <Time.h>  
+#include <Wire.h>  
+#include <DS1307RTC.h>
+>>>>>>> d370890d54998733991f67489e372c59450597bf
 //#include "TimeStuff.h"
 
 int runtime=1000;
 int curtime;
 int startTime = 1300 ;
 int stopTime = 1430 ;
+<<<<<<< HEAD
 #define DS1307_CTRL_ID 0x68 
 
 
+=======
+int TestHour=0;
+int TestMin=0;
+int THL=0;
+int TML=1;
+>>>>>>> d370890d54998733991f67489e372c59450597bf
 String h; //Hours
 String m; //Minutes
 String timeString =  "00:00";
@@ -21,6 +38,7 @@ char *TimeString;
 int lmin=255;
 int ms;
 int hs;
+<<<<<<< HEAD
 int StartMin = 0;
 int StopMin=0;
 int StartHour=0;
@@ -72,6 +90,40 @@ TouchScreenForm testMenu = TouchScreenForm("Tests",2);
 TouchScreenForm startTimeMenu = TouchScreenForm("Start Time",2);
 
 TouchScreenForm setupMenu = TouchScreenForm("Setup",2);
+=======
+int p1=3;
+int p2=5;
+int p3=6;
+int p4=9;
+
+
+TouchScreenButton TimeMenuButtons[] = {
+  TouchScreenButton("HUp", TSC.createColor(0, 0, 0), TSC.createColor(255, 200, 0), 30, TSC.getScreenHeight() - 180 , 60, 30),
+  TouchScreenButton("HDown", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 255), 30, TSC.getScreenHeight() - 120, 60, 30),
+  TouchScreenButton("MUp", TSC.createColor(0, 0, 0), TSC.createColor(255, 200, 0), 140, TSC.getScreenHeight() - 180 , 60, 30),
+  TouchScreenButton("MDown", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 255), 140, TSC.getScreenHeight() - 120, 60, 30),
+  TouchScreenButton("Back", TSC.createColor(0, 0, 0), TSC.createColor(255, 0, 0), 20, TSC.getScreenHeight() - 40, 60, 30),
+  TouchScreenButton("Save", TSC.createColor(0, 0, 0), TSC.createColor(0, 255, 0), 130, TSC.getScreenHeight() - 40, 60, 30),
+  TouchScreenButton("ENDOFFORM")
+  };
+
+TouchScreenLabel aboutLabels[] = {
+  TouchScreenLabel("Vacume Control", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 5, 35, 1, 2, true),
+  TouchScreenLabel("Written By: Chris Yarger", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 5, 50, 1, 2, true),
+  TouchScreenLabel("ENDOFFORM")
+  };
+
+TouchScreenButton aboutButtons[] = {
+  TouchScreenButton("<- Back", TSC.createColor(255, 255, 255), TSC.createColor(255, 0, 0), 50, TSC.getScreenHeight() - 50, 2, 10),
+  TouchScreenButton("ENDOFFORM")
+  };
+
+TouchScreenForm startScreen = TouchScreenForm("VacControl",2);
+TouchScreenForm mainMenu = TouchScreenForm("Menu",2);
+TouchScreenForm testMenu = TouchScreenForm("Tests",2);
+TouchScreenForm setupMenu = TouchScreenForm("Setup",2);
+TouchScreenForm aboutForm = TouchScreenForm("About", 2);
+>>>>>>> d370890d54998733991f67489e372c59450597bf
 
 TouchScreenForm *curMenu = &startScreen;
 
@@ -90,6 +142,7 @@ void runVac(){
 }
 
 void drawStartTimeMenu(){
+<<<<<<< HEAD
   cs();
   startTimeMenu.draw();
   Serial.println("drawStartTimeMenu");
@@ -148,6 +201,9 @@ void drawStartTimeMenu(){
   TouchScreenArea lbl1 = TouchScreenLabel(s1, TSC.createColor(255, 255, 255), TSC.createColor(0, 100, 0), 10, 50, 5, 10, true);
 
   lbl1.draw();
+=======
+  Serial.println("drawStartTimeMenu");
+>>>>>>> d370890d54998733991f67489e372c59450597bf
 }
 
 void drawStopTimeMenu(){
@@ -165,6 +221,13 @@ void drawRun(){
   Serial.println("DrawRun");
 }
 
+<<<<<<< HEAD
+=======
+void drawAlarm(){
+  Serial.println("DrawAlarm Mode Screen");
+}
+
+>>>>>>> d370890d54998733991f67489e372c59450597bf
 void Alarm(){
   Serial.println("Alarm");
 }
@@ -177,12 +240,19 @@ void checkSensors(){
   Serial.println("CheckSensors");
 }
 
+<<<<<<< HEAD
 
+=======
+void status(){
+  Serial.println("Status Screen");
+}
+>>>>>>> d370890d54998733991f67489e372c59450597bf
 
 // check various buttons and perform actions if any was pressed
 void checkButtons(){
   Serial.println("CheckButtons");
 }
+<<<<<<< HEAD
 void cs(){
 
   TSC.clearScreen();
@@ -191,6 +261,10 @@ void cs(){
 }
 void DrawTime(){
 
+=======
+
+void DrawTime(){
+>>>>>>> d370890d54998733991f67489e372c59450597bf
   if (lmin != minute(now())){
     Serial.println("DrawTime+ExecuteDraw");
     hs=hour(now());
@@ -202,7 +276,11 @@ void DrawTime(){
       h=String(hs);
     }
     //Give Leading Zeros To Minutes
+<<<<<<< HEAD
     if (ms >= 0 && ms < 10) {
+=======
+      if (ms >= 0 && ms < 10) {
+>>>>>>> d370890d54998733991f67489e372c59450597bf
       m=leadingZero[ms];
     }
     else{
@@ -215,8 +293,12 @@ void DrawTime(){
     Serial.println(timeString);
     if(curMenu == &startScreen){
       Serial.println("drawTime");
+<<<<<<< HEAD
       TouchScreenArea lbl1 = TouchScreenLabel(TimeString, TSC.createColor(255, 255, 255), TSC.createColor(0, 100, 0), 10, 50, 5, 10, true);
 
+=======
+      TouchScreenArea lbl1 = TouchScreenLabel(TimeString, TSC.createColor(255, 255, 255), TSC.createColor(0, 100, 0), 10, 200, 5, 10, true);
+>>>>>>> d370890d54998733991f67489e372c59450597bf
       lbl1.draw();
     }
     lmin=minute(now());
@@ -226,6 +308,7 @@ void DrawTime(){
 void drawMainScreen(){
   Serial.println("MAinScreen");
   lmin=99;
+<<<<<<< HEAD
   cs();
   curMenu=&startScreen;
   curMenu->draw();
@@ -235,6 +318,13 @@ void drawMainScreen(){
 void drawMainMenu(){
   cs();
   digitalWrite(alarmp, LOW);
+=======
+  curMenu=&startScreen;
+  curMenu->draw();
+}
+
+void drawMainMenu(){
+>>>>>>> d370890d54998733991f67489e372c59450597bf
   Serial.println("Menu");
   curMenu=&mainMenu;
   curMenu->draw();
@@ -243,16 +333,42 @@ void drawMainMenu(){
 
 
 void drawSetup(){
+<<<<<<< HEAD
   cs();
   Serial.println("drawSettings");
   curMenu=&setupMenu;
   curMenu->draw();
 
+=======
+  Serial.println("drawSettings");
+  curMenu=&setupMenu;
+  curMenu->draw();
+  
+>>>>>>> d370890d54998733991f67489e372c59450597bf
 }
 
 
 
 
+<<<<<<< HEAD
+=======
+void drawAbout(){
+  Serial.println("drawAboutScreen");
+
+  aboutForm.draw();
+
+  //while(1){ // stay on this screen until the back button is hit
+  TouchScreenArea *item = aboutForm.process(true);
+  if(item!=NULL){
+    if(!strcmp(item->getText(),"<- Back")){
+      Serial.println("Return from About");
+      drawMainMenu();
+      return;
+      //  }
+    }
+  }
+}
+>>>>>>> d370890d54998733991f67489e372c59450597bf
 
 // check to see if any menu item was pressed and do something
 
@@ -268,8 +384,16 @@ void checkMenuSelection(TouchScreenArea *item) {
     }//end if StartScreen
     if(curMenu == &mainMenu){
       Serial.println("Main Menu");
+<<<<<<< HEAD
 
       if (item->getText() == "Tests"){
+=======
+      if (item->getText() == "About"){
+        Serial.println("About");
+        drawAbout();
+      }
+      else if (item->getText() == "Tests"){
+>>>>>>> d370890d54998733991f67489e372c59450597bf
         Serial.println("to Tests Screen");
         drawTests();
       }
@@ -278,13 +402,19 @@ void checkMenuSelection(TouchScreenArea *item) {
         Serial.println("to Setup Screen");
         drawSetup();
       }
+<<<<<<< HEAD
 
       else if (item->getText() == "Back"){
+=======
+      
+      else if (item->getText() == "<- BACK"){
+>>>>>>> d370890d54998733991f67489e372c59450597bf
         Serial.println("Back to Main Screen");
         drawMainScreen();
       }
       // if the menu item didn't get handled redraw it unpressed
     }//end If mainMenu
+<<<<<<< HEAD
     if(curMenu == &setupMenu){
       if (item->getText() == "Time"){
         Serial.println("Back to Main Screen");
@@ -311,6 +441,9 @@ void checkMenuSelection(TouchScreenArea *item) {
         drawMainMenu();
       }
     }
+=======
+
+>>>>>>> d370890d54998733991f67489e372c59450597bf
   }//end if Not Null
 }//end checkMenuSelection
 
@@ -320,12 +453,16 @@ void checkMenuSelection(TouchScreenArea *item) {
 
 void setup(void) {
   Serial.begin(9600);
+<<<<<<< HEAD
     Wire.begin();
+=======
+>>>>>>> d370890d54998733991f67489e372c59450597bf
   Serial.println("start Setup");
   TSC.setBackColor(TSC.createColor(0, 100, 0)); // change the default background color
   TSC.init(); // make sure everything get initialized
   setSyncProvider(RTC.get);//Get Time from RTC
   //setupMenu.setLabels(aboutLabels);
+<<<<<<< HEAD
   pinMode(alarmp, OUTPUT);
   startScreen.setButtons(startButtons);
   mainMenu.setButtons(menuButtons);
@@ -333,6 +470,10 @@ void setup(void) {
 
   setupMenu.setButtons(setupButtons);
 
+=======
+  aboutForm.setLabels(aboutLabels);
+  aboutForm.setButtons(aboutButtons);
+>>>>>>> d370890d54998733991f67489e372c59450597bf
   //curMenu=&startScreen;
   drawMainScreen(); 
   Serial.println("Setup complete");
@@ -356,5 +497,8 @@ void loop(void) {
 
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> d370890d54998733991f67489e372c59450597bf
