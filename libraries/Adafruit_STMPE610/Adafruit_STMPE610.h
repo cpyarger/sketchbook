@@ -113,22 +113,22 @@
 #define STMPE_GPIO_ALT_FUNCT 0x17
 
 
-class Point {
+class TS_Point {
  public:
-  Point(void);
-  Point(int16_t x, int16_t y, int16_t z);
+  TS_Point(void);
+  TS_Point(int16_t x, int16_t y, int16_t z);
   
-  bool operator==(Point);
-  bool operator!=(Point);
+  bool operator==(TS_Point);
+  bool operator!=(TS_Point);
 
   int16_t x, y, z;
 };
 
-class TouchScreen{
+class Adafruit_STMPE610{
  public:
-  TouchScreen(uint8_t cspin, uint8_t mosipin, uint8_t misopin, uint8_t clkpin);
-  TouchScreen(uint8_t cs);
-  TouchScreen(void);
+  Adafruit_STMPE610(uint8_t cspin, uint8_t mosipin, uint8_t misopin, uint8_t clkpin);
+  Adafruit_STMPE610(uint8_t cs);
+  Adafruit_STMPE610(void);
   boolean begin(uint8_t i2caddr = STMPE_ADDR);  
 
   void writeRegister8(uint8_t reg, uint8_t val);
@@ -139,7 +139,7 @@ class TouchScreen{
   boolean touched(void);
   boolean bufferEmpty(void);
   uint8_t bufferSize(void);
-  Point getPoint(void);
+  TS_Point getPoint(void);
 
  private:
   uint8_t spiIn();

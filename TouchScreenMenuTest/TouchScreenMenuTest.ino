@@ -1,3 +1,7 @@
+#include <SPI.h>
+
+#include <Wire.h>
+
 /*
 This example shows the various abilities of the TouchScreenMenu library.
 See the readme.txt file for information on find the libraries this library uses.
@@ -22,11 +26,12 @@ See the readme.txt file for information on find the libraries this library uses.
  License along with this library; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+ 
 #include <TouchScreenMenu.h>
 #include <TouchScreen.h>
 #include <TFT.h>
 #include <cstddef.h>
-
+#include <Adafruit_GFX.h>
 // create the array of items for the first sub menu
 TouchScreenMenuItem subMenuItems[] = {
   TouchScreenMenuItem("<- Main Menu"),

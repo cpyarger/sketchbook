@@ -24,7 +24,7 @@
 #include <Wire.h>
 #include <SPI.h>
 
-#include "TouchScreen.h"
+#include "Adafruit_STMPE610.h"
 
 #if defined (SPI_HAS_TRANSACTION)
 // SPI transaction support allows managing SPI settings and prevents
@@ -41,7 +41,7 @@ static uint8_t mySPCR;
 */
 /**************************************************************************/
 // software SPI
-TouchScreen::TouchScreen(uint8_t cspin, uint8_t mosipin, uint8_t misopin, uint8_t clkpin) {
+Adafruit_STMPE610::Adafruit_STMPE610(uint8_t cspin, uint8_t mosipin, uint8_t misopin, uint8_t clkpin) {
   _CS = cspin;
   _MOSI = mosipin;
   _MISO = misopin;
@@ -49,13 +49,13 @@ TouchScreen::TouchScreen(uint8_t cspin, uint8_t mosipin, uint8_t misopin, uint8_
 }
 
 // hardware SPI
-TouchScreen::TouchScreen(uint8_t cspin) {
+Adafruit_STMPE610::Adafruit_STMPE610(uint8_t cspin) {
   _CS = cspin;
   _MOSI = _MISO = _CLK = -1;
 }
 
 // I2C
-TouchScreen::TouchScreen() {
+Adafruit_STMPE610::Adafruit_STMPE610() {
 // use i2c
   _CS = -1;
 }
@@ -66,7 +66,7 @@ TouchScreen::TouchScreen() {
     @brief  Setups the HW
 */
 /**************************************************************************/
-boolean TouchScreen::begin(uint8_t i2caddr) {
+boolean Adafruit_STMPE610::begin(uint8_t i2caddr) {
   if (_CS != -1 && _CLK == -1) {
     // hardware SPI
     pinMode(_CS, OUTPUT);
@@ -156,19 +156,19 @@ boolean TouchScreen::begin(uint8_t i2caddr) {
   return true;
 }
 
-boolean TouchScreen::touched(void) {
+boolean Adafruit_STMPE610::touched(void) {
   return (readRegister8(STMPE_TSC_CTRL) & 0x80);
 }
 
-boolean TouchScreen::bufferEmpty(void) {
+boolean Adafruit_STMPE610::bufferEmpty(void) {
   return (readRegister8(STMPE_FIFO_STA) & STMPE_FIFO_STA_EMPTY);
 }
 
-uint8_t TouchScreen::bufferSize(void) {
+uint8_t Adafruit_STMPE610::bufferSize(void) {
   return readRegister8(STMPE_FIFO_SIZE);
 }
 
-uint16_t TouchScreen::getVersion() {
+uint16_t Adafruit_STMPE610::getVersion() {
   uint16_t v;
   //Serial.print("get version");
   v = readRegister8(0);
@@ -181,7 +181,7 @@ uint16_t TouchScreen::getVersion() {
 
 /*****************************/
 
-void TouchScreen::readData(uint16_t *x, uint16_t *y, uint8_t *z) {
+void Adafruit_STMPE610::readData(uint16_t *x, uint16_t *y, uint8_t *z) {
   uint8_t data[4];
   
   for (uint8_t i=0; i<4; i++) {
@@ -200,14 +200,14 @@ void TouchScreen::readData(uint16_t *x, uint16_t *y, uint8_t *z) {
     writeRegister8(STMPE_INT_STA, 0xFF); // reset all ints
 }
 
-Point TouchScreen::getPoint(void) {
+TS_Point Adafruit_STMPE610::getPoint(void) {
   uint16_t x, y;
   uint8_t z;
   readData(&x, &y, &z);
-  return Point(x, y, z);
+  return TS_Point(x, y, z);
 }
 
-uint8_t TouchScreen::spiIn() {
+uint8_t Adafruit_STMPE610::spiIn() {
   if (_CLK == -1) {
 #if defined (SPI_HAS_TRANSACTION)
     uint8_t d = SPI.transfer(0);
@@ -228,7 +228,7 @@ uint8_t TouchScreen::spiIn() {
   else
     return shiftIn(_MISO, _CLK, MSBFIRST);
 }
-void TouchScreen::spiOut(uint8_t x) {  
+void Adafruit_STMPE610::spiOut(uint8_t x) {  
   if (_CLK == -1) {
 #if defined (SPI_HAS_TRANSACTION)
     SPI.transfer(x);
@@ -247,7 +247,7 @@ void TouchScreen::spiOut(uint8_t x) {
     shiftOut(_MOSI, _CLK, MSBFIRST, x);
 }
 
-uint8_t TouchScreen::readRegister8(uint8_t reg) {
+uint8_t Adafruit_STMPE610::readRegister8(uint8_t reg) {
   uint8_t x ;
   if (_CS == -1) {
    // use i2c
@@ -277,7 +277,7 @@ uint8_t TouchScreen::readRegister8(uint8_t reg) {
 
   return x;
 }
-uint16_t TouchScreen::readRegister16(uint8_t reg) {
+uint16_t Adafruit_STMPE610::readRegister16(uint8_t reg) {
   uint16_t x;
   if (_CS == -1) {
    // use i2c
@@ -312,7 +312,7 @@ uint16_t TouchScreen::readRegister16(uint8_t reg) {
   return x;
 }
 
-void TouchScreen::writeRegister8(uint8_t reg, uint8_t val) {
+void Adafruit_STMPE610::writeRegister8(uint8_t reg, uint8_t val) {
   if (_CS == -1) {
     // use i2c
     Wire.beginTransmission(_i2caddr);
@@ -335,20 +335,20 @@ void TouchScreen::writeRegister8(uint8_t reg, uint8_t val) {
 
 /****************/
 
-Point::Point(void) {
+TS_Point::TS_Point(void) {
   x = y = 0;
 }
 
-Point::Point(int16_t x0, int16_t y0, int16_t z0) {
+TS_Point::TS_Point(int16_t x0, int16_t y0, int16_t z0) {
   x = x0;
   y = y0;
   z = z0;
 }
 
-bool Point::operator==(Point p1) {
+bool TS_Point::operator==(TS_Point p1) {
   return  ((p1.x == x) && (p1.y == y) && (p1.z == z));
 }
 
-bool Point::operator!=(Point p1) {
+bool TS_Point::operator!=(TS_Point p1) {
   return  ((p1.x != x) || (p1.y != y) || (p1.z != z));
 }

@@ -32,10 +32,11 @@ See the readme.txt file for information on find the libraries this library uses.
 #include <TouchScreen.h>
 #include <TFT.h>
 #include <cstddef.h>
-
+#include <Wire.h>
+#include <SPI.h>
 TouchScreenForm form1 = TouchScreenForm("Form 1", 2);
 
-TouchScreenForm form2 = TouchScreenForm("Form 2", 2);
+TouchScreenForm form2 = TouchScreenForm("Form 2",   2);
 
 TouchScreenLabel labels[] = {
   TouchScreenLabel("Big label.", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 60, 2, 2, true),
@@ -68,7 +69,7 @@ TouchScreenSlider sliders[] = {
 };
 
 TouchScreenButton buttons2[] = {
-  TouchScreenButton("<- Back", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 50, TSC.getScreenHeight() - 50, 2, 10),
+          TouchScreenButton("<- Back", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 50, TSC.getScreenHeight() - 50, 2, 10),
   TouchScreenButton("ENDOFFORM")
 };
 
