@@ -75,6 +75,8 @@ char* leadingZero[]={
 // Use hardware SPI (on Uno, #13, #12, #11) and the above for CS/DC
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
 int w=tft.height();
+boolean EEPROMSave(){
+}
 
 
 void drawButton( int y, String title, int color, int tcolor ){
@@ -203,6 +205,8 @@ String theTime(){
   return timeString;
 }
 
+
+
 int checkPress(){
   //Serial.println("Function CheckPress");
 
@@ -258,6 +262,35 @@ int checkPress(){
           return 4;
         }
         
+        break;
+        case 4:
+        if (checkButton(y1)){
+          Serial.println("Success");
+          return 6; //Mode
+        }
+        if (checkButton(y2)){
+          Serial.println("Success");
+          return 7; //RunTiem
+        }
+        if (checkButton(y3)){
+          Serial.println("Success");
+          return 8;//SetTime
+        }
+        if (checkButton(y4)){
+          Serial.println("Saving");
+          if (!EEPROMSave()){
+            Serial.println("EEPROM Save Success");
+          }
+          else {
+            Serial.println("EEPROM Save Success");
+          }
+          return 1;
+        }
+        break;
+        case 5:
+        if (checkButton(y4)){
+        return 2;
+      }
         break;
     } //endSwitch
 
@@ -318,6 +351,8 @@ void drawScreen(int menu){
     tft.print("Version: ");
     tft.println(Version);
     tft.setTextSize(dts);
+        drawButton(y4,"Back",ILI9341_GREEN, ILI9341_BLACK); 
+
     break;
   case 6: //Mode Setting
     tft.fillScreen(ILI9341_BLACK);
