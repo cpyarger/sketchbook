@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# location of RXTXcomm.jar
+RXTXjar=/usr/share/rxtx-2/lib
+
+# location of librxtxSerial.so
+#RXTXlib=/usr/lib/rxtx-2
+RXTXlib=/opt/local/rxtx/usr/lib/jni/
+
+java -Djava.library.path=$RXTXlib -cp $RXTXjar/RXTXcomm.jar:. uno2tap "$@"
+

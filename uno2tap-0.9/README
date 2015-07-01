@@ -1,0 +1,48 @@
+
+***
+
+WARNING - do not use this software or connect this to your systems.  I do not know what I am doing and it may fry your c64 and void its warranty.  If you do understand electronics please review the firmware code and make your own mind up.
+
+***
+
+Load the uno2tap_fw.ino firmware onto the Arduino
+
+Connect the Arduino pins to the cassette port of the C64:
+
+Pin 3 - Read
+Pin 4 - Write
+Pin 5 - Sense
+
+I've been using crocodile clips but a better connector should be devised.
+
+You can change the pin numbers using the defines at the top of uno2tap_fw.ino.
+
+The cassette port pin locations are explained here:
+
+http://www.c64-wiki.com/index.php/Cassette_Port
+
+Connect the Arduino to the PC via USB.
+
+The uno2tap server software is written in Java.  It has been tested on Linux but should also run on Windows and MacOS.  Adapt the 'uno2tap' shell script for your system - Java needs to be able to find the RxTx library which is usually installed along with the Arduino IDE.  There is info about using the library at:
+
+http://playground.arduino.cc/Interfacing/Java
+
+The arguments to uno2tap are:
+
+-dev <serial device name> 	- The serial device that the Arduino presents as - If you don't specify this option some defaults will be tried.
+-tap <tap image>		- Specify the tap image file to use.  If it does not exist a new one is created for recording over.
+
+Once uno2tap is connected and running, press shift and run-stop on the c64 and type 'play' in the uno2tap console.  Type 'help' in the console for other commands.
+
+Make sure that you backup your precious taps before recording over any of them.
+
+
+Issues
+
+The timing is really tight.  It works on Linux so long as the PC isn't too busy with anything else.  Windows and MacOS with different serial/USB drivers may be different.
+
+There's no cassette motor sense so the tape can't be automatically paused.  At the start of loading hold down the C= key so that the c64 doesn't pause at the FOUND X stage.
+
+There are some dodgy versions of the RxTx library that crash with this and also the Arduino IDE serial monitor.  Switching to a different librxtx.so fixed this for me.
+
+

@@ -1,0 +1,23 @@
+
+turbo tape short pulse width: 211u
+
+115200 baud
+
+calculate pulse interval delay: 20u
+copy 128 byte buffer: 4u
+serial.write() 1 byte: 20u
+
+serial buffer size: 63 bytes
+
+serial.available(): 8u
+
+serial.read(): 8u
+serial.read()*32: 150u
+serial.read()*60: 300u
+
+pc->arduino 1 byte ping round trip: 2000-8000u
+pc->arduino 32 byte ping, 1 byte response round trip: 4000-8000u
+	=125-250u per byte
+pc->arduino 60 byte ping, 1 byte response round trip: 7000-11000u
+	=116-183u per byte
+
