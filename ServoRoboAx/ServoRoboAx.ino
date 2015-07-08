@@ -26,13 +26,16 @@ ax12SetRegister2(2, 32,  0);
 
 void loop()
 {
-
+dance(); 
+stopall();
+delay(2000);
 }
 
 void stopall(){
 ax12SetRegister2(1, 32,  0);
 ax12SetRegister2(2, 32,  0);
-}  
+}
+
 void dance (){
   forward(200);
     delay(1000);
