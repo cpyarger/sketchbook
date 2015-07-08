@@ -26,3 +26,20 @@ ABC,0123,512,512,512,512,128
 
 When this packet is sent, On Device "0123", All Servos should center themselves, and the PWM for the light should be set to 25%
 
+
+or maybe...
+
+
+Prepend,DeviceID,CommandCode,SID1P,SID2P,SID3P,SID4P,LPWML,CommandCodeParams,?,?,
+
+
+
+
+Potential Commands, 
+ChangeLightLevel
+ReportVoltage
+ReportServoTemps
+SelfTestAndReport
+???
+???
+???
