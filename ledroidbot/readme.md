@@ -14,7 +14,7 @@ Packets are Broadcast to ALL Xbee modules on mesh network, Device ID is by the i
 
 Packet makeup
 
-(<Command code>,<DeviceID>,<servoID1Position>,<ServoID2Position>,<ServoID3Position>,<ServoID4Position>,<LightPWMLevel>)
+Prepend,DeviceID,servoID1Position,ServoID2Position,ServoID3Position,ServoID4Position,LightPWMLevel
 
 Example
 
