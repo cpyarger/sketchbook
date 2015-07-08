@@ -1,12 +1,15 @@
-LEDroid Bot Firmware
+Ledroid Xbee/arbotix packatized control firmware
 
 **************************************************
 
-Ledroid Xbee/arbotix packatized control firmware
 
 Developed by Christopher P. Yarger <cpyarger@gmail.com> 
 
 Released under GPLv3.
+
+**************************************************
+
+
 
 Notes:
 
