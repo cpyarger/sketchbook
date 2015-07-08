@@ -39,8 +39,11 @@ Serial.begin(9600);
 Serial.print("Arbotix controller ");
 Serial.print(DeviceID);
 Serial.println(" Initializing");
+CheckVoltage();
 }
-void loop(){}
+void loop(){
+  
+}
 
 
 void CheckVoltage(){  
